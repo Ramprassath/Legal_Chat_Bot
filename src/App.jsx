@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import { Send, Trash2, Settings, Loader2, MessageSquare } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+console.log("API URL =", import.meta.env.VITE_API_URL);
 
 function App() {
   const [messages, setMessages] = useState([]);
