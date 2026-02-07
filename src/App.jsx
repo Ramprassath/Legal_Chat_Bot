@@ -5,6 +5,10 @@ import { Send, Trash2, Settings, Loader2, MessageSquare } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+// Add this debug log (remove after fixing)
+console.log('API_URL:', API_URL);
+console.log('Environment:', import.meta.env.MODE);
+
 function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
