@@ -17,5 +17,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: "/Legal_Chat_Bot/",
+  base: '/Legal_Chat_Bot/',
 })
