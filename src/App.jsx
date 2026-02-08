@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
-import { Send, Trash2, Settings, Loader2, MessageSquare } from 'lucide-react';
+import { Send, Trash2, Settings, Loader2, MessageSquare, X, ChevronDown, Sparkles } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-// Add this debug log (remove after fixing)
 console.log('API_URL:', API_URL);
 console.log('Environment:', import.meta.env.MODE);
 
@@ -34,7 +33,6 @@ function App() {
   }, [messages]);
 
   useEffect(() => {
-    // Check backend health on mount
     checkHealth();
   }, []);
 
@@ -58,7 +56,6 @@ function App() {
     setInput('');
     setError(null);
 
-    // Add user message to chat
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
@@ -70,10 +67,9 @@ function App() {
           sessionId: sessionId,
           options: settings
         },
-        { timeout: 60000 } // 60 second timeout
+        { timeout: 60000 }
       );
 
-      // Add AI response to chat
       setMessages(prev => [
         ...prev,
         {
@@ -101,7 +97,6 @@ function App() {
       
       setError(errorMessage);
       
-      // Add error message to chat
       setMessages(prev => [
         ...prev,
         {
@@ -129,174 +124,280 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <header className="bg-white shadow-md px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <MessageSquare className="w-8 h-8 text-indigo-600" />
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">AI Chat</h1>
-            <p className="text-xs text-gray-500">Powered by your fine-tuned model</p>
-          </div>
-        </div>
-        
-        <div className="flex gap-2">
-          <button
-            onClick={() => setShowSettings(!showSettings)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            title="Settings"
-          >
-            <Settings className="w-5 h-5 text-gray-600" />
-          </button>
-          <button
-            onClick={clearChat}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            title="Clear chat"
-          >
-            <Trash2 className="w-5 h-5 text-gray-600" />
-          </button>
-        </div>
-      </header>
-
-      {/* Settings Panel */}
-      {showSettings && (
-        <div className="bg-white border-b px-6 py-4">
-          <h3 className="font-semibold mb-3 text-gray-700">Generation Settings</h3>
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Max Length: {settings.maxLength}
-              </label>
-              <input
-                type="range"
-                min="128"
-                max="2048"
-                step="128"
-                value={settings.maxLength}
-                onChange={(e) => setSettings({...settings, maxLength: parseInt(e.target.value)})}
-                className="w-full"
-              />
+    <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      {/* Header with glassmorphism effect */}
+      <header className="relative bg-white/80 backdrop-blur-xl shadow-lg px-6 py-4 border-b border-white/20">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl blur opacity-75 animate-pulse"></div>
+              <div className="relative bg-gradient-to-br from-indigo-600 to-purple-600 p-2 rounded-xl">
+                <MessageSquare className="w-6 h-6 text-white" />
+              </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Temperature: {settings.temperature}
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="2"
-                step="0.1"
-                value={settings.temperature}
-                onChange={(e) => setSettings({...settings, temperature: parseFloat(e.target.value)})}
-                className="w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Top P: {settings.topP}
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={settings.topP}
-                onChange={(e) => setSettings({...settings, topP: parseFloat(e.target.value)})}
-                className="w-full"
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Error Banner */}
-      {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 px-6 py-3">
-          <p className="text-red-700 text-sm">{error}</p>
-        </div>
-      )}
-
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-4">
-        {messages.length === 0 ? (
-          <div className="h-full flex items-center justify-center">
-            <div className="text-center max-w-md">
-              <MessageSquare className="w-16 h-16 text-indigo-300 mx-auto mb-4" />
-              <h2 className="text-2xl font-semibold text-gray-700 mb-2">
-                Start a Conversation
-              </h2>
-              <p className="text-gray-500">
-                Ask me anything! I'm powered by a fine-tuned AI model.
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                AI Chat Assistant
+              </h1>
+              <p className="text-xs text-gray-500 flex items-center gap-1">
+                <Sparkles className="w-3 h-3" />
+                Powered by fine-tuned intelligence
               </p>
             </div>
           </div>
+          
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowSettings(!showSettings)}
+              className={`p-2.5 hover:bg-indigo-50 rounded-xl transition-all duration-200 ${
+                showSettings ? 'bg-indigo-100 text-indigo-600' : 'text-gray-600'
+              }`}
+              title="Settings"
+            >
+              <Settings className={`w-5 h-5 ${showSettings ? 'rotate-90' : ''} transition-transform duration-300`} />
+            </button>
+            <button
+              onClick={clearChat}
+              className="p-2.5 hover:bg-red-50 rounded-xl transition-all duration-200 text-gray-600 hover:text-red-600"
+              title="Clear chat"
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Enhanced Settings Panel with smooth animation */}
+      <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
+        showSettings ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+      }`}>
+        <div className="bg-white/90 backdrop-blur-sm border-b border-gray-200 px-6 py-5">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-gray-800 flex items-center gap-2">
+                <Settings className="w-4 h-4" />
+                Generation Settings
+              </h3>
+              <button
+                onClick={() => setShowSettings(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Max Length
+                  <span className="ml-2 text-indigo-600 font-semibold">{settings.maxLength}</span>
+                </label>
+                <input
+                  type="range"
+                  min="128"
+                  max="2048"
+                  step="128"
+                  value={settings.maxLength}
+                  onChange={(e) => setSettings({...settings, maxLength: parseInt(e.target.value)})}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                />
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>128</span>
+                  <span>2048</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Temperature
+                  <span className="ml-2 text-indigo-600 font-semibold">{settings.temperature.toFixed(1)}</span>
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="2"
+                  step="0.1"
+                  value={settings.temperature}
+                  onChange={(e) => setSettings({...settings, temperature: parseFloat(e.target.value)})}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                />
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>0.0</span>
+                  <span>2.0</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Top P
+                  <span className="ml-2 text-indigo-600 font-semibold">{settings.topP.toFixed(2)}</span>
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={settings.topP}
+                  onChange={(e) => setSettings({...settings, topP: parseFloat(e.target.value)})}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                />
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>0.0</span>
+                  <span>1.0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Enhanced Error Banner */}
+      {error && (
+        <div className="bg-red-50/90 backdrop-blur-sm border-l-4 border-red-500 px-6 py-3 animate-slideIn">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <p className="text-red-700 text-sm flex items-center gap-2">
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+              {error}
+            </p>
+            <button
+              onClick={() => setError(null)}
+              className="text-red-400 hover:text-red-600 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto px-4 py-6">
+        {messages.length === 0 ? (
+          <div className="h-full flex items-center justify-center">
+            <div className="text-center max-w-md animate-fadeIn">
+              <div className="relative mb-6">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full blur-2xl opacity-30 animate-pulse"></div>
+                <MessageSquare className="w-20 h-20 text-indigo-500 mx-auto relative" strokeWidth={1.5} />
+              </div>
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                Start a Conversation
+              </h2>
+              <p className="text-gray-500 mb-6">
+                Ask me anything! I'm powered by a fine-tuned AI model ready to assist you.
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {['Tell me a story', 'Help me code', 'Explain quantum physics'].map((suggestion, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setInput(suggestion)}
+                    className="px-4 py-2 bg-white/80 hover:bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:shadow-md transition-all duration-200"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         ) : (
-          <div className="max-w-4xl mx-auto space-y-4">
+          <div className="max-w-4xl mx-auto space-y-6">
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-slideUp`}
+                style={{ animationDelay: `${index * 0.05}s` }}
               >
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                  className={`max-w-[85%] rounded-2xl px-5 py-3 shadow-sm ${
                     message.role === 'user'
-                      ? 'bg-indigo-600 text-white'
+                      ? 'bg-gradient-to-br from-indigo-600 to-purple-600 text-white shadow-indigo-200'
                       : message.role === 'error'
-                      ? 'bg-red-100 text-red-800 border border-red-300'
-                      : 'bg-white shadow-md'
+                      ? 'bg-red-50 text-red-800 border border-red-200'
+                      : 'bg-white shadow-md border border-gray-100'
                   }`}
                 >
                   {message.role === 'assistant' ? (
-                    <div className="markdown-content prose prose-sm max-w-none">
-                      <ReactMarkdown>{message.content}</ReactMarkdown>
+                    <div className="space-y-1">
+                      <div className="markdown-content prose prose-sm max-w-none">
+                        <ReactMarkdown>{message.content}</ReactMarkdown>
+                      </div>
                       {message.modelName && (
-                        <p className="text-xs text-gray-400 mt-2 italic">
-                          via {message.modelName}
-                        </p>
+                        <div className="flex items-center gap-1.5 pt-2 mt-2 border-t border-gray-100">
+                          <Sparkles className="w-3 h-3 text-indigo-400" />
+                          <p className="text-xs text-gray-400 italic">
+                            {message.modelName}
+                          </p>
+                        </div>
                       )}
                     </div>
                   ) : (
-                    <p className="whitespace-pre-wrap">{message.content}</p>
+                    <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
                   )}
                 </div>
               </div>
             ))}
+            
+            {/* Typing Indicator */}
+            {isLoading && (
+              <div className="flex justify-start animate-slideUp">
+                <div className="bg-white rounded-2xl px-5 py-4 shadow-md border border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                      <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                      <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                    </div>
+                    <span className="text-sm text-gray-500">AI is thinking...</span>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <div ref={messagesEndRef} />
           </div>
         )}
       </div>
 
-      {/* Input */}
-      <div className="bg-white border-t px-6 py-4">
+      {/* Enhanced Input Area */}
+      <div className="bg-white/80 backdrop-blur-xl border-t border-gray-200 px-4 py-4 shadow-2xl">
         <form onSubmit={sendMessage} className="max-w-4xl mx-auto">
-          <div className="flex gap-2">
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              disabled={isLoading}
-            />
+          <div className="flex gap-3">
+            <div className="flex-1 relative">
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type your message..."
+                className="w-full px-5 py-4 pr-12 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-200 bg-white shadow-sm"
+                disabled={isLoading}
+              />
+              {input && (
+                <button
+                  type="button"
+                  onClick={() => setInput('')}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
             <button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+              className="px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl disabled:shadow-none font-medium"
             >
               {isLoading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Thinking...
+                  <span className="hidden sm:inline">Thinking</span>
                 </>
               ) : (
                 <>
                   <Send className="w-5 h-5" />
-                  Send
+                  <span className="hidden sm:inline">Send</span>
                 </>
               )}
             </button>
           </div>
+          <p className="text-xs text-gray-400 mt-2 text-center">
+            Press Enter to send • Shift+Enter for new line
+          </p>
         </form>
       </div>
     </div>
