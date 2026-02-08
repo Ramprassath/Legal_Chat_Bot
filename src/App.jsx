@@ -137,11 +137,11 @@ function App() {
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                AI Chat Assistant
+                Legal Assistant
               </h1>
               <p className="text-xs text-gray-500 flex items-center gap-1">
                 <Sparkles className="w-3 h-3" />
-                Powered by fine-tuned intelligence
+                One stop AI for all your Legal Needs
               </p>
             </div>
           </div>
@@ -276,13 +276,17 @@ function App() {
                 <MessageSquare className="w-20 h-20 text-indigo-500 mx-auto relative" strokeWidth={1.5} />
               </div>
               <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">
-                Start a Conversation
+                Welcome to Legal Assistant
               </h2>
               <p className="text-gray-500 mb-6">
-                Ask me anything! I'm powered by a fine-tuned AI model ready to assist you.
+                Get instant legal guidance and assistance. Ask me about legal matters, contracts, rights, or any legal questions.
               </p>
               <div className="flex flex-wrap gap-2 justify-center">
-                {['Tell me a story', 'Help me code', 'Explain quantum physics'].map((suggestion, i) => (
+                {[
+                  'Draft a contract', 
+                  'Explain my rights', 
+                  'Review legal document'
+                ].map((suggestion, i) => (
                   <button
                     key={i}
                     onClick={() => setInput(suggestion)}
@@ -363,7 +367,7 @@ function App() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your message..."
+                placeholder="Ask a legal question..."
                 className="w-full px-5 py-4 pr-12 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-200 bg-white shadow-sm"
                 disabled={isLoading}
               />
